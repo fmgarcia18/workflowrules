@@ -1,15 +1,14 @@
 package com.fmgarcia.workflowrules.service;
 
-import java.util.Optional;
-
-import com.fmgarcia.workflowrules.domain.Customer;
+import com.fmgarcia.workflowrules.dtos.CustomerNewResquestDto;
+import com.fmgarcia.workflowrules.dtos.CustomerResponseDto;
 
 public interface CustomerService {
 
-	Customer save(Customer customer);
+	CustomerResponseDto save(CustomerNewResquestDto requestDTO);
 
-	Iterable<Customer> findAll();
+	Iterable<CustomerResponseDto> findAll();
 
-	Optional<Customer> findById(Long id);
+	CustomerResponseDto findById(Long id);
 
 }

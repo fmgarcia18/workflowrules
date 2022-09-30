@@ -10,27 +10,40 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.fmgarcia.workflowrules.domain.Customer;
 import com.fmgarcia.workflowrules.dtos.CustomerNewResquestDto;
+import com.fmgarcia.workflowrules.service.CustomerService;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+@RequiredArgsConstructor
 @Slf4j
 @RestController
 @RequestMapping("/customer")
 public class CustomerController {
 
-	@GetMapping
-	public ResponseEntity<String> getAllCustomers() {
+	private final CustomerService customerService;
 
-		return ResponseEntity.status(HttpStatus.OK).body("Get all customers");
+	@GetMapping
+	public ResponseEntity<Iterable<Customer>> getAllCustomers() {
+
+		Iterable<Customer> customers = customerService.findAll();
+
+		return ResponseEntity.status(HttpStatus.OK).body(customers);
 	}
 
 	@PostMapping
-	public ResponseEntity<String> saveCustomer(@Valid @RequestBody CustomerNewResquestDto request) {
+	public ResponseEntity<Customer> saveCustomer(@Valid @RequestBody CustomerNewResquestDto request) {
 
 		log.info(request.toString());
 
-		return ResponseEntity.status(HttpStatus.OK).body("Save customer");
+		Customer newCustomer = Customer.builder().email(request.getEmail()).firstName(request.getFirstName())
+				.lastName(request.getLastName()).phone(request.getPhone()).build();
+
+		Customer customer = customerService.save(newCustomer);
+
+		return ResponseEntity.status(HttpStatus.OK).body(customer);
 	}
 
 }
